@@ -7,14 +7,32 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    
+ <div class="container">
     <h1>To-Do List</h1>
-    <form>
-        <input type="text" placeholder="Add a new task" required>
+    <form id="todo-form">
+        <input type="text" id="todo-input" placeholder="Add a new task" required>
         <button type="submit">Add</button>
+        <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';">
     </form>
-    <ul>
+        
+    <div id="todo-modal" class="modal">
+        <div class="modal-content">
+            <h2>Details</h2>
+            <form id="modal-form">
+                <input type="date" id="task-date">
+                <textarea id="task-notes" placeholder="Additional notes"></textarea>
+                <button type="submit">Save</button>
+            </form>
+        </div>
+    </div>  
+ </div>
+
+<ul id="todo-list">
+    
         <!-- Aquí se mostrarán las tareas -->
-    </ul>
+</ul>
+
     <script src="app.js"></script>
 </body>
 </html>

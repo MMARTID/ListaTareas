@@ -1,0 +1,14 @@
+{
+    "server": {
+      "baseDir": "src",
+      "routes": {
+        "/node_modules": "node_modules"
+      }
+    },
+    "files": ["./src/**/*.{html,htm,css,js}"],
+    "injectChanges": true,
+    "csp": {
+      "enabled": false
+    }
+  }
+  

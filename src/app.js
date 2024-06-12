@@ -1,55 +1,56 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('todo-form');
-    const input = document.getElementById('todo-input');
+    const todoForm = document.getElementById('todo-form');
+    const todoInput = document.getElementById('todo-input');
     const todoList = document.getElementById('todo-list');
+    const todoModal = document.getElementById('todo-modal');
+    const closeModalButton = document.querySelector('.close');
+    const modalForm = document.getElementById('modal-form');
+    let currentTaskElement;
 
-    // Load todos from localStorage
-    const todos = JSON.parse(localStorage.getItem('todos')) || [];
-
-    // Render todos
-    const renderTodos = () => {
-        todoList.innerHTML = '';
-        todos.forEach((todo, index) => {
-            const li = document.createElement('li');
-            li.textContent = todo.text;
-            if (todo.completed) {
-                li.classList.add('completed');
-            }
-            const deleteButton = document.createElement('button');
-            deleteButton.textContent = 'Delete';
-            deleteButton.onclick = () => {
-                todos.splice(index, 1);
-                saveTodos();
-                renderTodos();
-            };
-            li.onclick = () => {
-                todo.completed = !todo.completed;
-                saveTodos();
-                renderTodos();
-            };
-            li.appendChild(deleteButton);
-            todoList.appendChild(li);
-        });
-    };
-
-    // Save todos to localStorage
-    const saveTodos = () => {
-        localStorage.setItem('todos', JSON.stringify(todos));
-    };
-
-    // Add new todo
-    form.onsubmit = (e) => {
+    todoForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        const newTodo = {
-            text: input.value,
-            completed: false
-        };
-        todos.push(newTodo);
-        saveTodos();
-        renderTodos();
-        input.value = '';
-    };
+        const taskTitle = todoInput.value.trim();
+        if (taskTitle) {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <span>${taskTitle}</span>
+                <button class="delete">X</button>
+            `;
+            todoList.appendChild(li);
+            todoInput.value = '';
+            li.addEventListener('click', () => {
+                currentTaskElement = li;
+                todoModal.style.display = 'block';
+            });
+            li.querySelector('.delete').addEventListener('click', (e) => {
+                e.stopPropagation();
+                li.remove();
+            });
+        }
+    });
 
-    // Initial render
-    renderTodos();
+    closeModalButton.addEventListener('click', () => {
+        todoModal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (e) => {
+        if (e.target == todoModal) {
+            todoModal.style.display = 'none';
+        }
+    });
+
+    modalForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const taskDate = document.getElementById('task-date').value;
+        const taskNotes = document.getElementById('task-notes').value.trim();
+        if (currentTaskElement) {
+            const taskDetails = document.createElement('div');
+            taskDetails.innerHTML = `
+                <p>Date: ${taskDate}</p>
+                <p>Notes: ${taskNotes}</p>
+            `;
+            currentTaskElement.appendChild(taskDetails);
+            todoModal.style.display = 'none';
+        }
+    });
 });
