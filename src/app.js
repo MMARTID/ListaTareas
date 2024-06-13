@@ -11,9 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Abrir el modal al hacer clic en el botón de crear tarea
     todoForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        const currentTaskTitle = todoInput.value.trim(); // Obtener el título de la tarea del input
-        document.getElementById('modal-title').textContent = currentTaskTitle; // Mostrar el título en el modal
-        todoModal.style.display = 'block'; // Mostrar el modal
+        const currentTaskTitle = todoInput.value.trim();
+        document.getElementById('modal-title').textContent = currentTaskTitle;
+        todoModal.style.display = 'block';
     });
 
     // Mostrar/ocultar el menú de categorías
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         const taskDate = document.getElementById('task-datetime').value;
         const taskNotes = document.getElementById('task-notes').value.trim();
-        const currentTaskTitle = document.getElementById('modal-title').textContent; // Obtener el título del modal
+        const currentTaskTitle = document.getElementById('modal-title').textContent;
         const taskFrequency = document.getElementById('task-frequency').value;
 
         // Crear la tarjeta de tarea
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p>Frequency: ${taskFrequency}</p>
             </div>
         `;
-        todoList.appendChild(li); // Agregar la tarjeta a la lista de tareas
+        todoList.appendChild(li);
 
         // Limpiar el formulario del modal y cerrar el modal
         modalForm.reset();
