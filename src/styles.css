@@ -1,34 +1,35 @@
+/* Estilos Generales */
 body { 
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f4;
     height: 100vh;
     margin: 0;
-    
 }
 
+/* Contenedor Principal */
 div.container {
-    width: 100%; /* Ocupa el 100% del ancho disponible */
-    max-width: 100%; /* Asegura que no sea más ancho que el ancho del viewport */
-    padding: 20px; /* Puedes ajustar el padding según necesites */
-    box-sizing: border-box; /* Incluye el padding y el borde en el ancho total */
-    /* Otros estilos opcionales */
-    background-color: #f4d874; /* Color de fondo opcional */
-    margin: 0 auto; /* Centra el contenedor horizontalmente */
+    width: 100%;
+    max-width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #f4d874;
+    margin: 0 auto;
 }
 
+/* Encabezado */
 h1 {
     margin-bottom: 30px;
     color: rgb(0, 0, 0);
     font-size: 30px;
     text-align: center;
-
 }
 
+/* Formulario Principal */
 form {
     display: flex;
     margin-bottom: 15px;
-    width: 100%; /* Ajusta al 100% del contenedor */
-    justify-content: center; /* Centra horizontalmente */
+    width: 100%;
+    justify-content: center;
 }
 
 #todo-input {
@@ -38,6 +39,7 @@ form {
     border-radius: 10px;
 }
 
+/* Botones */
 button {
     padding: 10px;
     border: none;
@@ -52,10 +54,11 @@ button:hover {
     background: #218838;
 }
 
+/* Lista de Tareas */
 ul {
     list-style: none;
     padding: 0;
-    margin-top: 4;
+    margin-top: 4px;
     border-radius: 8%;
     margin: 10px;
 }
@@ -67,8 +70,7 @@ li {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom:10px;
-
+    margin-bottom: 10px;
 }
 
 li.completed {
@@ -76,6 +78,7 @@ li.completed {
     color: #999;
 }
 
+/* Botón de Eliminar Tarea */
 li button.delete {
     background: #dc3545;
     color: white;
@@ -88,6 +91,8 @@ li button.delete {
 li button:hover {
     background: #c82333;
 }
+
+/* Estilos del Texto de las Tareas */
 li span {
     font-size: 18px;
     font-weight: bold;
@@ -98,7 +103,15 @@ li p {
     font-size: 14px;
 }
 
-/* Estilos para el modal */
+/* Estilos de Categoría */
+.category {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.6);
+    margin-left: 10px;
+    font-style: italic;
+}
+
+/* Estilos para el Modal */
 .modal {
     display: none; 
     position: fixed; 
@@ -108,23 +121,88 @@ li p {
     width: 100%; 
     height: 100%; 
     overflow: auto; 
-    background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+    background-color: rgba(0, 0, 0, 0.5); 
     padding-top: 60px;
 }
 
 .modal-content {
     background-color: #ffffff;
-    margin: 10% auto; /* Centrar verticalmente */
+    margin: 10% auto; 
     padding: 10px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 80%; /* Ancho del modal */
-    max-width: 300px; /* Ancho máximo para dispositivos grandes */
+    width: 80%;
+    max-width: 400px;
     position: relative;
-    text-align: center; /* Alineación centrada del contenido */
+    text-align: center;
 }
 
-/* Agregar estos estilos al archivo styles.css */
+/* Botón de Cerrar Modal */
+.close {
+    color: #aaa;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Título del Modal */
+#modal-title {
+    color: #333;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Entradas de Fecha y Frecuencia en el Modal */
+#task-datetime,
+#task-frequency {
+    width: calc(100% - 22px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;    
+    margin-top: 10px;
+}
+
+/* Notas Adicionales en el Modal */
+#task-notes {
+    width: calc(100% - 22px);
+    height: 80px;
+    resize: vertical;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 10px auto;
+    display: block;
+    box-sizing: border-box;
+}
+
+/* Botón de Guardar en el Modal */
+#modal-form button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+#modal-form button:hover {
+    background-color: #218838;
+}
+
+/* Menú de Categorías */
 .category-menu {
     display: none;
     position: absolute;
@@ -151,6 +229,7 @@ li p {
     background-color: #f4f4f4;
 }
 
+/* Botón de Seleccionar Categoría */
 #category-button {
     margin-bottom: 10px;
     padding: 10px;
@@ -163,65 +242,4 @@ li p {
 
 #category-button:hover {
     background: #0056b3;
-}
-
-
-.close {
-    color: #aaa;
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-#modal-title {
-    color: #333;
-    font-size: 24px;
-    font-weight: bold;
-    text-align: center;
-}
-
-#task-datetime,
-#task-frequency {
-    width: calc(100% - 22px); /* Ajustar el ancho para evitar desbordamientos */
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-bottom: 10px;    
-    margin-top: 10px;
-}
-
-#task-notes {
-    width: 100%; /* Ocupar todo el ancho disponible menos el espacio para el borde */
-    height: 70px; /* Ajuste del alto */
-    resize: vertical; /* Permite redimensionar verticalmente */
-    padding: 10px;
-    border: 1px solid #cccccc;
-    border-radius: 5px;
-    margin: 10px auto; /* Centrado vertical y horizontal */
-    display: block;
-    box-sizing: border-box; /* Incluir padding y borde en el ancho total */
-}
-
-#modal-form button {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 3px;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-#modal-form button:hover {
-    background-color: #218838;
 }
