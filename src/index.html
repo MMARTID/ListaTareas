@@ -5,35 +5,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="h1">To-Do List</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
 </head>
 <body>
     
- <div class="container">
-    <h1>To-Do List</h1>
+<div class="container">
+    <h1>To-Do </h1>
     <form id="todo-form">
         <input type="text" id="todo-input" placeholder="Add a new task" required>
         <button type="submit">Create</button>
-        <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';">
     </form>
         
     <div id="todo-modal" class="modal">
         <div class="modal-content">
-            <h2 id="modal-form"></h2>
+            <h2 id="modal-title"></h2>
+            <button id="category-button">Select Category</button>
+            <div id="category-menu" class="category-menu">
+                <button class="category-option" data-category="personal">Personal</button>
+                <button class="category-option" data-category="work">Work</button>
+                <button class="category-option" data-category="others">Others</button>
+            </div>
             <form id="modal-form">
-                <input type="date" id="task-date">
-                <textarea id="task-notes" placeholder="Additional notes"></textarea>
+                <div>
+                <div id="additnotes">
+                 <textarea id="task-notes" placeholder="Additional notes"></textarea>
+                </div>            
+                    <div id="task-frequency">
+                <input type="text" id="task-datetime" placeholder="select date and time" data-input>         
+                <select id="task-frequency">
+                    <option value="once">Once</option>
+                    <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="annual">Annual</option>
+                </select>
+                    </div>
                 <button type="submit">Save</button>
-            </form>
+                </div>
+            </form>           
         </div>
-    </div>  
- </div>
-
-<ul id="todo-list">
-    
+    </div>
+</div>
+<div id="ul">
+    <ul id="todo-list">
         <!-- Aquí se mostrarán las tareas -->
-</ul>
+    </ul>
+</div>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    flatpickr("#task-datetime", {
+        enableTime: true, // Habilitar selección de hora
+        dateFormat: "Y-m-d H:i", // Formato de fecha y hora deseado
+    });
 
+    // Código JavaScript adicional para manejar la lógica de la aplicación
+</script>
 
-    <script src="app.js"></script>
+<script src="app.js"></script>
 </body>
 </html>

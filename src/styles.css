@@ -12,13 +12,13 @@ div.container {
     padding: 20px; /* Puedes ajustar el padding según necesites */
     box-sizing: border-box; /* Incluye el padding y el borde en el ancho total */
     /* Otros estilos opcionales */
-    background-color: #de3333; /* Color de fondo opcional */
+    background-color: #f4d874; /* Color de fondo opcional */
     margin: 0 auto; /* Centra el contenedor horizontalmente */
 }
 
 h1 {
     margin-bottom: 30px;
-    color: rgb(248, 152, 8);
+    color: rgb(0, 0, 0);
     font-size: 30px;
     text-align: center;
 
@@ -35,7 +35,7 @@ form {
     flex: 1;
     padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 3px;
+    border-radius: 10px;
 }
 
 button {
@@ -55,17 +55,20 @@ button:hover {
 ul {
     list-style: none;
     padding: 0;
-    margin-top: 0;
-    width: 100%;
+    margin-top: 4;
+    border-radius: 8%;
+    margin: 10px;
 }
 
 li {
-    background: #f4f4f4;
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
+    background: #c40f0f79;
+    border-radius: 10px;
+    padding: 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom:10px;
+
 }
 
 li.completed {
@@ -73,19 +76,28 @@ li.completed {
     color: #999;
 }
 
-li button {
+li button.delete {
     background: #dc3545;
     color: white;
     border: none;
-    padding: 5px;
-    margin-left: 5px;
-    border-radius: 3px;
+    padding: 8px;
+    border-radius: 4px;
     cursor: pointer;
 }
 
 li button:hover {
     background: #c82333;
 }
+li span {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+li p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
 /* Estilos para el modal */
 .modal {
     display: none; 
@@ -96,20 +108,63 @@ li button:hover {
     width: 100%; 
     height: 100%; 
     overflow: auto; 
-    background-color: rgba(0,0,0,0.4); 
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
     padding-top: 60px;
 }
 
 .modal-content {
-    background-color: #fefefe;
-    margin: 10% auto; 
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%; 
-    max-width: 400px;
-    border-radius: 5px;
+    background-color: #ffffff;
+    margin: 10% auto; /* Centrar verticalmente */
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 80%; /* Ancho del modal */
+    max-width: 300px; /* Ancho máximo para dispositivos grandes */
     position: relative;
+    text-align: center; /* Alineación centrada del contenido */
 }
+
+/* Agregar estos estilos al archivo styles.css */
+.category-menu {
+    display: none;
+    position: absolute;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    margin-top: 5px;
+    z-index: 10;
+    width: 150px;
+}
+
+.category-option {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    text-align: left;
+    border: none;
+    background: #fff;
+    cursor: pointer;
+    border-bottom: 1px solid #ccc;
+}
+
+.category-option:hover {
+    background-color: #f4f4f4;
+}
+
+#category-button {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: none;
+    background: #007bff;
+    color: white;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+#category-button:hover {
+    background: #0056b3;
+}
+
 
 .close {
     color: #aaa;
@@ -126,4 +181,47 @@ li button:hover {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+#modal-title {
+    color: #333;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#task-datetime,
+#task-frequency {
+    width: calc(100% - 22px); /* Ajustar el ancho para evitar desbordamientos */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;    
+    margin-top: 10px;
+}
+
+#task-notes {
+    width: 100%; /* Ocupar todo el ancho disponible menos el espacio para el borde */
+    height: 70px; /* Ajuste del alto */
+    resize: vertical; /* Permite redimensionar verticalmente */
+    padding: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    margin: 10px auto; /* Centrado vertical y horizontal */
+    display: block;
+    box-sizing: border-box; /* Incluir padding y borde en el ancho total */
+}
+
+#modal-form button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+#modal-form button:hover {
+    background-color: #218838;
 }

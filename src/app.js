@@ -3,51 +3,74 @@ document.addEventListener('DOMContentLoaded', () => {
     const todoInput = document.getElementById('todo-input');
     const todoList = document.getElementById('todo-list');
     const todoModal = document.getElementById('todo-modal');
-    const closeModalButton = document.querySelector('.close');
     const modalForm = document.getElementById('modal-form');
-    let currentTaskElement;
+    const categoryButton = document.getElementById('category-button');
+    const categoryMenu = document.getElementById('category-menu');
+    let selectedCategory = '';
 
-       // Abrir el modal al hacer clic en el botón de crear tarea
+    // Abrir el modal al hacer clic en el botón de crear tarea
     todoForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        currentTaskTitle = todoInput.value.trim(); // Guardar el título de la tarea temporalmente
-        todoModal.style.display = 'block'; // Abrir el modal
+        const currentTaskTitle = todoInput.value.trim(); // Obtener el título de la tarea del input
+        document.getElementById('modal-title').textContent = currentTaskTitle; // Mostrar el título en el modal
+        todoModal.style.display = 'block'; // Mostrar el modal
     });
 
-    // Cerrar el modal al hacer clic en el botón de cerrar
-    closeModalButton.addEventListener('click', () => {
-        todoModal.style.display = 'none';
+    // Mostrar/ocultar el menú de categorías
+    categoryButton.addEventListener('click', () => {
+        categoryMenu.style.display = categoryMenu.style.display === 'block' ? 'none' : 'block';
     });
 
-    // Cerrar el modal al hacer clic fuera del modal
-    window.addEventListener('click', (e) => {
-        if (e.target == todoModal) {
-            todoModal.style.display = 'none';
+    // Seleccionar categoría
+    categoryMenu.addEventListener('click', (e) => {
+        if (e.target.classList.contains('category-option')) {
+            selectedCategory = e.target.dataset.category;
+            categoryButton.textContent = `Category: ${e.target.textContent}`;
+            categoryMenu.style.display = 'none';
         }
     });
 
     // Manejar la submit del formulario del modal
     modalForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        const taskDate = document.getElementById('task-date').value;
+        const taskDate = document.getElementById('task-datetime').value;
         const taskNotes = document.getElementById('task-notes').value.trim();
-        if (currentTaskTitle) {
-            // Crear la tarjeta de tarea después de guardar los detalles en el modal
-            const li = document.createElement('li');
-            li.innerHTML = `
+        const currentTaskTitle = document.getElementById('modal-title').textContent; // Obtener el título del modal
+        const taskFrequency = document.getElementById('task-frequency').value;
+
+        // Crear la tarjeta de tarea
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <div>
                 <span>${currentTaskTitle}</span>
+                <span class="category">${selectedCategory}</span>
                 <button class="delete">X</button>
-            `;
-            const taskDetails = document.createElement('div');
-            taskDetails.innerHTML = `
+            </div>
+            <div>
                 <p>Date: ${taskDate}</p>
                 <p>Notes: ${taskNotes}</p>
-            `;
-            li.appendChild(taskDetails);
-            todoList.appendChild(li); // Agregar la tarjeta a la lista de tareas
-            currentTaskTitle = ''; // Limpiar la variable temporal
-            todoInput.value = ''; // Limpiar el campo de entrada
-            todoModal.style.display = 'none'; // Cerrar el modal
+                <p>Frequency: ${taskFrequency}</p>
+            </div>
+        `;
+        todoList.appendChild(li); // Agregar la tarjeta a la lista de tareas
+
+        // Limpiar el formulario del modal y cerrar el modal
+        modalForm.reset();
+        todoModal.style.display = 'none';
+        selectedCategory = '';
+        categoryButton.textContent = 'Select Category';
+    });
+
+    // Cerrar el modal al hacer clic en el botón de cerrar
+    const closeModalButton = document.querySelector('.close');
+    closeModalButton.addEventListener('click', () => {
+        todoModal.style.display = 'none';
+    });
+
+    // Cerrar el modal al hacer clic fuera del modal
+    window.addEventListener('click', (e) => {
+        if (e.target === todoModal) {
+            todoModal.style.display = 'none';
         }
     });
 });
