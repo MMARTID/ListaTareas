@@ -1,29 +1,26 @@
 body { 
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f4;
-    display: flex;
-    justify-content: center; /* Centra horizontalmente */
-    align-items: center; /* Centra verticalmente */
     height: 100vh;
     margin: 0;
-    align-content: center;
     
 }
 
 div.container {
-    background: purple;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 360px;
-    max-width: 90%;
-    align-content: center;
+    width: 100%; /* Ocupa el 100% del ancho disponible */
+    max-width: 100%; /* Asegura que no sea más ancho que el ancho del viewport */
+    padding: 20px; /* Puedes ajustar el padding según necesites */
+    box-sizing: border-box; /* Incluye el padding y el borde en el ancho total */
+    /* Otros estilos opcionales */
+    background-color: #de3333; /* Color de fondo opcional */
+    margin: 0 auto; /* Centra el contenedor horizontalmente */
 }
 
 h1 {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     color: rgb(248, 152, 8);
-    font-size: 24px;
+    font-size: 30px;
+    text-align: center;
 
 }
 
@@ -48,6 +45,7 @@ button {
     color: white;
     border-radius: 3px;
     cursor: pointer;
+    margin: 10px;
 }
 
 button:hover {
