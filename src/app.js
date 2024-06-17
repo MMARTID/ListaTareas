@@ -82,6 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Crear la tarjeta de tarea
         const li = document.createElement('li');
+        li.setAttribute('data-category', selectedCategory); // Añadir atributo data-category
         li.innerHTML = `
             <div class="task-header">
                 <span class="task-title">${currentTaskTitle}</span>
@@ -146,4 +147,26 @@ document.addEventListener('DOMContentLoaded', () => {
     // Mostrar la notificación inicial al cargar la página por primera vez
     showInitialNotification();
 
+    // Filtro de tareas por categoría
+    const filterButtons = document.querySelectorAll('.filter-button');
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const filterValue = button.getAttribute('data-filter');
+            filterTasks(filterValue);
+        });
+    });
+
+    function filterTasks(category) {
+        const tasks = document.querySelectorAll('#todo-list > li');
+
+        tasks.forEach(task => {
+            const taskCategory = task.getAttribute('data-category');
+            if (category === 'all' || taskCategory === category) {
+                task.style.display = 'block';
+            } else {
+                task.style.display = 'none';
+            }
+        });
+    }
 });
