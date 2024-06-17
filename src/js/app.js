@@ -1,3 +1,5 @@
+// app.js
+
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Document is ready');
 
@@ -75,6 +77,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Crear la tarjeta de tarea
         const li = document.createElement('li');
+        li.classList.add('task-card'); // Añadir clase general para estilos de tarjeta
+        if (selectedCategory) {
+            li.classList.add(`category-${selectedCategory.toLowerCase()}`); // Clase dinámica basada en la categoría seleccionada
+        }
         li.innerHTML = `
             <div class="task-header">
                 <span class="task-title">${currentTaskTitle}</span>
@@ -136,6 +142,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Filtrar tareas por categoría
+    const filterButtons = document.querySelectorAll('.filter-button');
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const filterCategory = button.getAttribute('data-filter');
+            const allTasks = document.querySelectorAll('#todo-list li');
+
+            allTasks.forEach(task => {
+                const category = task.querySelector('.task-category').textContent.toLowerCase();
+                if (filterCategory === 'all' || category === filterCategory) {
+                    task.style.display = 'block';
+                } else {
+                    task.style.display = 'none';
+                }
+            });
+        });
+    });
+
     // Solicitar permiso de notificación al cargar la página
     requestNotificationPermission()
         .then(() => {
@@ -146,4 +171,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
 });
-
