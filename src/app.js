@@ -10,6 +10,38 @@ document.addEventListener('DOMContentLoaded', () => {
     const categoryMenu = document.getElementById('category-menu');
     let selectedCategory = '';
 
+    // Verificar y solicitar permiso para notificaciones al cargar la página
+    if ("Notification" in window) {
+        if (Notification.permission === 'granted') {
+            // Permiso ya concedido
+            console.log('Notification permission already granted');
+        } else if (Notification.permission !== 'denied') {
+            // Solicitar permiso si no está denegado
+            Notification.requestPermission().then((permission) => {
+                if (permission === 'granted') {
+                    console.log('Notification permission granted');
+                    showInitialNotification(); // Mostrar la notificación inicial si se concede el permiso
+                }
+            });
+        }
+    } else {
+        console.error("Notifications not supported by your browser");
+    }
+
+    // Función para mostrar la notificación inicial
+    function showInitialNotification() {
+        showNotification('Welcome to Task Manager', {
+            body: 'Start managing your tasks now!'
+        });
+    }
+
+    // Función para mostrar notificación
+    function showNotification(title, options) {
+        if (Notification.permission === 'granted') {
+            new Notification(title, options);
+        }
+    }
+
     // Abrir el modal al hacer clic en el botón de crear tarea
     todoForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -17,6 +49,11 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('modal-title').textContent = currentTaskTitle;
         console.log(`Opening modal for task: ${currentTaskTitle}`);
         todoModal.classList.add('show'); // Agregar la clase 'show' para mostrar el modal
+
+        // Mostrar notificación al abrir el modal (opcional)
+        showNotification('New Task Created', {
+            body: `Task: ${currentTaskTitle}`
+        });
     });
 
     // Mostrar/ocultar el menú de categorías
@@ -68,6 +105,11 @@ document.addEventListener('DOMContentLoaded', () => {
         todoModal.classList.remove('show'); // Remover la clase 'show' para ocultar el modal
         selectedCategory = '';
         categoryButton.textContent = 'Select Category';
+
+        // Mostrar notificación al agregar una nueva tarea
+        showNotification('New Task Added', {
+            body: `Task: ${currentTaskTitle}`
+        });
     });
 
     // Cerrar el modal al hacer clic en el botón de cerrar
@@ -85,12 +127,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-});
-
-document.addEventListener('DOMContentLoaded', () => {
+    // Cambiar entre modos (To-Do y Lista de Compras)
     const toggleMode = document.getElementById('toggle-mode');
     const modeLabel = document.getElementById('mode-label');
-    const todoList = document.getElementById('todo-list');
 
     toggleMode.addEventListener('change', () => {
         if (toggleMode.checked) {
@@ -103,4 +142,8 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Switched to To-Do mode');
         }
     });
+
+    // Mostrar la notificación inicial al cargar la página por primera vez
+    showInitialNotification();
+
 });
