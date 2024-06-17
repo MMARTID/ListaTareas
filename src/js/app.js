@@ -10,35 +10,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const categoryMenu = document.getElementById('category-menu');
     let selectedCategory = '';
 
-    // Verificar y solicitar permiso para notificaciones al cargar la página
-    if ("Notification" in window) {
-        if (Notification.permission === 'granted') {
-            // Permiso ya concedido
-            console.log('Notification permission already granted');
-        } else if (Notification.permission !== 'denied') {
-            // Solicitar permiso si no está denegado
-            Notification.requestPermission().then((permission) => {
-                if (permission === 'granted') {
-                    console.log('Notification permission granted');
-                    showInitialNotification(); // Mostrar la notificación inicial si se concede el permiso
-                }
-            });
+    // Función para solicitar permiso de notificación
+    function requestNotificationPermission() {
+        if ("Notification" in window) {
+            if (Notification.permission === 'granted') {
+                return Promise.resolve();
+            } else if (Notification.permission !== 'denied') {
+                return Notification.requestPermission().then((permission) => {
+                    if (permission === 'granted') {
+                        return Promise.resolve();
+                    } else {
+                        return Promise.reject('Permission denied');
+                    }
+                });
+            } else {
+                return Promise.reject('Permission denied');
+            }
+        } else {
+            return Promise.reject('Notifications not supported');
         }
-    } else {
-        console.error("Notifications not supported by your browser");
     }
 
-    // Función para mostrar la notificación inicial
-    function showInitialNotification() {
-        showNotification('Welcome to Task Manager', {
-            body: 'Start managing your tasks now!'
-        });
-    }
-
-    // Función para mostrar notificación
+    // Función para mostrar la notificación
     function showNotification(title, options) {
-        if (Notification.permission === 'granted') {
-            new Notification(title, options);
+        if ("Notification" in window) {
+            if (Notification.permission === 'granted') {
+                new Notification(title, options);
+            }
         }
     }
 
@@ -49,11 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('modal-title').textContent = currentTaskTitle;
         console.log(`Opening modal for task: ${currentTaskTitle}`);
         todoModal.classList.add('show'); // Agregar la clase 'show' para mostrar el modal
-
-        // Mostrar notificación al abrir el modal (opcional)
-        showNotification('New Task Created', {
-            body: `Task: ${currentTaskTitle}`
-        });
     });
 
     // Mostrar/ocultar el menú de categorías
@@ -143,7 +136,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Mostrar la notificación inicial al cargar la página por primera vez
-    showInitialNotification();
+    // Solicitar permiso de notificación al cargar la página
+    requestNotificationPermission()
+        .then(() => {
+            console.log('Notification permission granted');
+        })
+        .catch((error) => {
+            console.error('Failed to get notification permission:', error);
+        });
 
 });
+
