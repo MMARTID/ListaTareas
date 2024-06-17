@@ -131,25 +131,3 @@ button {
 button:hover {
     background: #218838;
 }
-
-.filter-container {
-    margin-top: 15px;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.filter-button {
-    padding: 8px 16px;
-    border: 1px solid #ccc;
-    background-color: #f0f0f0;
-    color: #333;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-}
-
-.filter-button:hover {
-    background-color: #e0e0e0;
-}
