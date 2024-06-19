@@ -1,173 +1,164 @@
-// app.js
-
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Document is ready');
+    const elements = {
+        todoForm: document.getElementById('todo-form'),
+        todoInput: document.getElementById('todo-input'),
+        todoList: document.getElementById('todo-list'),
+        todoModal: document.getElementById('todo-modal'),
+        modalForm: document.getElementById('modal-form'),
+        categoryButton: document.getElementById('category-button'),
+        categoryMenu: document.getElementById('category-menu'),
+        toggleMode: document.getElementById('toggle-mode'),
+        modeLabel: document.getElementById('mode-label'),
+        filterButtons: document.querySelectorAll('.filter-button'),
+        closeModalButton: document.querySelector('.close')
+    };
 
-    const todoForm = document.getElementById('todo-form');
-    const todoInput = document.getElementById('todo-input');
-    const todoList = document.getElementById('todo-list');
-    const todoModal = document.getElementById('todo-modal');
-    const modalForm = document.getElementById('modal-form');
-    const categoryButton = document.getElementById('category-button');
-    const categoryMenu = document.getElementById('category-menu');
     let selectedCategory = '';
 
-    // Función para solicitar permiso de notificación
     function requestNotificationPermission() {
-        if ("Notification" in window) {
-            if (Notification.permission === 'granted') {
-                return Promise.resolve();
+        return new Promise((resolve, reject) => {
+            if (!("Notification" in window)) {
+                reject('Notifications not supported');
+            } else if (Notification.permission === 'granted') {
+                resolve();
             } else if (Notification.permission !== 'denied') {
-                return Notification.requestPermission().then((permission) => {
-                    if (permission === 'granted') {
-                        return Promise.resolve();
-                    } else {
-                        return Promise.reject('Permission denied');
-                    }
+                Notification.requestPermission().then(permission => {
+                    permission === 'granted' ? resolve() : reject('Permission denied');
                 });
             } else {
-                return Promise.reject('Permission denied');
+                reject('Permission denied');
             }
-        } else {
-            return Promise.reject('Notifications not supported');
-        }
+        });
     }
 
-    // Función para mostrar la notificación
     function showNotification(title, options) {
-        if ("Notification" in window) {
-            if (Notification.permission === 'granted') {
-                new Notification(title, options);
-            }
+        if ("Notification" in window && Notification.permission === 'granted') {
+            new Notification(title, options);
         }
     }
 
-    // Abrir el modal al hacer clic en el botón de crear tarea
-    todoForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const currentTaskTitle = todoInput.value.trim();
-        document.getElementById('modal-title').textContent = currentTaskTitle;
-        console.log(`Opening modal for task: ${currentTaskTitle}`);
-        todoModal.classList.add('show'); // Agregar la clase 'show' para mostrar el modal
-    });
-
-    // Mostrar/ocultar el menú de categorías
-    categoryButton.addEventListener('click', () => {
-        categoryMenu.style.display = categoryMenu.style.display === 'block' ? 'none' : 'block';
-        console.log(`Category menu ${categoryMenu.style.display === 'block' ? 'opened' : 'closed'}`);
-    });
-
-    // Seleccionar categoría
-    categoryMenu.addEventListener('click', (e) => {
-        if (e.target.classList.contains('category-option')) {
-            selectedCategory = e.target.dataset.category;
-            categoryButton.textContent = `Category: ${e.target.textContent}`;
-            categoryMenu.style.display = 'none';
-            console.log(`Selected category: ${selectedCategory}`);
-        }
-    });
-
-    // Manejar la submit del formulario del modal
-    modalForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const taskDate = document.getElementById('task-datetime').value;
-        const taskNotes = document.getElementById('task-notes').value.trim();
-        const currentTaskTitle = document.getElementById('modal-title').textContent;
-        const taskFrequency = document.getElementById('task-frequency').value;
-
-        // Crear la tarjeta de tarea
+    function addTaskToList(title, date, notes, frequency, category) {
         const li = document.createElement('li');
-        li.classList.add('task-card'); // Añadir clase general para estilos de tarjeta
-        if (selectedCategory) {
-            li.classList.add(`category-${selectedCategory.toLowerCase()}`); // Clase dinámica basada en la categoría seleccionada
+        li.classList.add('task-card');
+        if (category) {
+            li.classList.add(`category-${category.toLowerCase()}`);
         }
+        const frequencySpan = frequency !== 'once' ? `<span class="task-frequency"><i class="fas fa-sync-alt"></i> ${frequency}</span>` : '';
+        const notesPara = notes ? `<p><i class="fas fa-sticky-note"></i> ${notes}</p>` : '';
         li.innerHTML = `
             <div class="task-header">
-                <span class="task-title">${currentTaskTitle}</span>
-                <span class="task-category">${selectedCategory}</span>
-                ${taskFrequency !== 'once' ? `<span class="task-frequency"><i class="fas fa-sync-alt"></i> ${taskFrequency}</span>` : ''}
+                <span class="task-title">${title}</span>
+                <span class="task-category">${category}</span>
+                ${frequencySpan}
                 <div class="button-container">
                     <button class="delete"><i class="fas fa-trash-alt"></i></button>
                     <button class="confirm"><i class="fas fa-check"></i></button>
                 </div>
             </div>
             <div class="task-details">
-                <p><i class="fas fa-calendar-alt"></i> ${taskDate}</p>
-                ${taskNotes ? `<p><i class="fas fa-sticky-note"></i> ${taskNotes}</p>` : ''}
+                <p><i class="fas fa-calendar-alt"></i> ${date}</p>
+                ${notesPara}
             </div>
         `;
-        todoList.appendChild(li);
-        console.log(`Task added: ${currentTaskTitle}, Date: ${taskDate}, Notes: ${taskNotes}, Frequency: ${taskFrequency}, Category: ${selectedCategory}`);
+        elements.todoList.appendChild(li);
 
-        // Limpiar el formulario del modal y cerrar el modal
-        modalForm.reset();
-        todoModal.classList.remove('show'); // Remover la clase 'show' para ocultar el modal
+        li.querySelector('.delete').addEventListener('click', () => {
+            li.remove();
+            console.log(`Task deleted: ${title}`);
+        });
+
+        li.querySelector('.confirm').addEventListener('click', () => {
+            li.classList.toggle('completed');
+            console.log(`Task completed: ${title}`);
+        });
+
+        console.log(`Task added: ${title}, Date: ${date}, Notes: ${notes}, Frequency: ${frequency}, Category: ${category}`);
+    }
+
+    function openModal(taskTitle) {
+        document.getElementById('modal-title').textContent = taskTitle;
+        elements.todoModal.classList.add('show');
+    }
+
+    function closeModal() {
+        elements.todoModal.classList.remove('show');
+    }
+
+    elements.todoForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const currentTaskTitle = elements.todoInput.value.trim();
+        openModal(currentTaskTitle);
+        console.log(`Opening modal for task: ${currentTaskTitle}`);
+    });
+
+    elements.categoryButton.addEventListener('click', () => {
+        elements.categoryMenu.style.display = elements.categoryMenu.style.display === 'block' ? 'none' : 'block';
+        console.log(`Category menu ${elements.categoryMenu.style.display === 'block' ? 'opened' : 'closed'}`);
+    });
+
+    elements.categoryMenu.addEventListener('click', (e) => {
+        if (e.target.classList.contains('category-option')) {
+            selectedCategory = e.target.dataset.category;
+            elements.categoryButton.textContent = `Category: ${e.target.textContent}`;
+            elements.categoryMenu.style.display = 'none';
+            console.log(`Selected category: ${selectedCategory}`);
+        }
+    });
+
+    elements.modalForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const taskDate = document.getElementById('task-datetime').value;
+        const taskNotes = document.getElementById('task-notes').value.trim();
+        const currentTaskTitle = document.getElementById('modal-title').textContent;
+        const taskFrequency = document.getElementById('task-frequency').value;
+        
+        addTaskToList(currentTaskTitle, taskDate, taskNotes, taskFrequency, selectedCategory);
+        
+        elements.modalForm.reset();
+        closeModal();
         selectedCategory = '';
-        categoryButton.textContent = 'Select Category';
+        elements.categoryButton.textContent = 'Select Category';
 
-        // Mostrar notificación al agregar una nueva tarea
         showNotification('New Task Added', {
             body: `Task: ${currentTaskTitle}`
         });
     });
 
-    // Cerrar el modal al hacer clic en el botón de cerrar
-    const closeModalButton = document.querySelector('.close');
-    closeModalButton.addEventListener('click', () => {
-        todoModal.classList.remove('show'); // Remover la clase 'show' para ocultar el modal
+    elements.closeModalButton.addEventListener('click', () => {
+        closeModal();
         console.log('Modal closed');
     });
 
-    // Cerrar el modal al hacer clic fuera del modal
     window.addEventListener('click', (e) => {
-        if (e.target === todoModal) {
-            todoModal.classList.remove('show'); // Remover la clase 'show' para ocultar el modal
+        if (e.target === elements.todoModal) {
+            closeModal();
             console.log('Modal closed by clicking outside');
         }
     });
 
-    // Cambiar entre modos (To-Do y Lista de Compras)
-    const toggleMode = document.getElementById('toggle-mode');
-    const modeLabel = document.getElementById('mode-label');
-
-    toggleMode.addEventListener('change', () => {
-        if (toggleMode.checked) {
-            modeLabel.textContent = 'Shopping List on';
-            todoList.classList.add('shopping-list-mode');
-            console.log('Switched to Shopping List mode');
-        } else {
-            modeLabel.textContent = 'To-Do Mode';
-            todoList.classList.remove('shopping-list-mode');
-            console.log('Switched to To-Do mode');
-        }
+    elements.toggleMode.addEventListener('change', () => {
+        const modeText = elements.toggleMode.checked ? 'Shopping List on' : 'To-Do Mode';
+        elements.modeLabel.textContent = modeText;
+        elements.todoList.classList.toggle('shopping-list-mode', elements.toggleMode.checked);
+        console.log(`Switched to ${modeText}`);
     });
 
-    // Filtrar tareas por categoría
-    const filterButtons = document.querySelectorAll('.filter-button');
-
-    filterButtons.forEach(button => {
+    elements.filterButtons.forEach(button => {
         button.addEventListener('click', () => {
             const filterCategory = button.getAttribute('data-filter');
-            const allTasks = document.querySelectorAll('#todo-list li');
-
+            const allTasks = elements.todoList.querySelectorAll('li');
             allTasks.forEach(task => {
                 const category = task.querySelector('.task-category').textContent.toLowerCase();
-                if (filterCategory === 'all' || category === filterCategory) {
-                    task.style.display = 'block';
-                } else {
-                    task.style.display = 'none';
-                }
+                task.style.display = (filterCategory === 'all' || category === filterCategory) ? 'block' : 'none';
             });
         });
     });
 
-    // Solicitar permiso de notificación al cargar la página
     requestNotificationPermission()
         .then(() => {
             console.log('Notification permission granted');
         })
-        .catch((error) => {
+        .catch(error => {
             console.error('Failed to get notification permission:', error);
         });
-
 });
