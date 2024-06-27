@@ -1,0 +1,6 @@
+/* Estilos para el modo Shopping List */
+.shopping-list-mode .task-card {
+    /* estilos específicos para el modo Shopping List */
+    background-color: lightgreen;
+}
+
